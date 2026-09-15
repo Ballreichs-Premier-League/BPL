@@ -71,8 +71,8 @@ a { color: inherit; }
 }
 
 .crest {
-  width: 160px;
-  height: 160px;
+  width: 320px;
+  height: 320px;
   flex-shrink: 0;
   border-radius: 50%;
   background: var(--white);
@@ -715,8 +715,8 @@ td.owed-cell.has-owed { color: var(--red-deep); font-weight: 700; }
 }
 
 .footer-crest {
-  width: 90px;
-  height: 90px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   background: var(--white);
   padding: 3px;
