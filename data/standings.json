@@ -1,1 +1,18 @@
+{
+  "updatedAt": "2026-09-15",
+  "teams": [
+    { "name": "The One True Sun God",        "wins": 1, "losses": 0, "ties": 0, "standing": 3 },
+    { "name": "HEINZ Tow-Maters",    "wins": 1, "losses": 0, "ties": 0, "standing": 5 },
+    { "name": "Jadolf Hurtler",      "wins": 0, "losses": 1, "ties": 0, "standing": 10 },
+    { "name": "Galley Boys",         "wins": 1, "losses": 0, "ties": 0, "standing": 6 },
+    { "name": "Brain Blast",         "wins": 1, "losses": 0, "ties": 0, "standing": 1 },
+    { "name": "Sauce Boss",          "wins": 0, "losses": 1, "ties": 0, "standing": 9 },
+    { "name": "Forbidden Weens",     "wins": 1, "losses": 0, "ties": 0, "standing": 4 },
+    { "name": "Monty's Python",         "wins": 0, "losses": 1, "ties": 0, "standing": 7 },
+    { "name": "Stroud Boys",         "wins": 1, "losses": 0, "ties": 0, "standing": 2 },
+    { "name": "Tiger Bloods",        "wins": 0, "losses": 1, "ties": 0, "standing": 12 },
+    { "name": "Spice Lords",         "wins": 0, "losses": 1, "ties": 0, "standing": 8 },
+    { "name": "Piesman Fan Club",    "wins": 0, "losses": 1, "ties": 0, "standing": 11 }
+  ]
+}
 
