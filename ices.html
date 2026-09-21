@@ -46,13 +46,40 @@
     <div class="ices-loading">Pulling the latest from the sheet…</div>
   </div>
 
-  <div class="rule-box">
+  <div class="section-head" style="margin-top:44px; margin-bottom:16px;">
+    <h2 style="font-size:24px;">Submit Your Ice</h2>
+    <p class="section-desc">Got iced? Fill this out and attach the video — it'll show up in the log below automatically.</p>
+  </div>
+  <div class="submit-panel">
+    <div id="ff-compose"></div>
+    <script async defer src="https://formfacade.com/include/105978268095953230565/form/1FAIpQLSd800ot1PE5B9HtngVb7B32TLxxjPFAqlr-QlKZ45Ua-wY2Dw/classic.js?div=ff-compose"></script>
+  </div>
+
+  <div class="section-head" style="margin-top:44px;">
+    <h2 style="font-size:24px;">Ice Submission Log</h2>
+    <p class="section-desc">Click a manager to see who iced them, then click a name to watch the proof.</p>
+  </div>
+  <div id="ice-log">
+    <div class="ices-loading">Loading submission log…</div>
+  </div>
+
+  <div class="rule-box" style="margin-top:36px;">
     <strong>The rule:</strong> if a player in your starting lineup — not a defense — scores 0 points or less in a
     given week, you chug a Smirnoff Ice and post proof to the group chat. This tracker mirrors the league's
     <a href="https://docs.google.com/spreadsheets/d/1GgBvjiKJ7bSm-T6he38b0rG_sk8vhiAcL2UD_AuB5FA/edit?usp=sharing" target="_blank" rel="noopener">Google Sheet</a>
     — edit the sheet and this page updates automatically.
   </div>
 </main>
+
+<div class="video-modal-overlay" id="video-modal-overlay">
+  <div class="video-modal-box">
+    <button class="video-modal-close" id="video-modal-close" aria-label="Close">×</button>
+    <div class="video-modal-title" id="video-modal-title"></div>
+    <div class="video-modal-frame-wrap">
+      <iframe id="video-modal-iframe" src="" allow="autoplay" allowfullscreen title="Ice video evidence"></iframe>
+    </div>
+  </div>
+</div>
 
 <footer class="site-footer-full">
   <div class="wrap footer-grid">
