@@ -50,7 +50,6 @@ const trophySVG = `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" x
 </svg>`;
 
 // A couple of pages need managers.json to cross-reference (photos/teams).
-// Load it once, lazily, so pages that don't need it never fetch it.
 let _managersPromise = null;
 function getManagers() {
   if (!_managersPromise) _managersPromise = loadJSON("data/managers.json").catch(() => []);
@@ -179,11 +178,17 @@ if (page === "golf") {
         el("div", { class: "golf-col-label", text: "Losers" }),
         el("ul", {}, y.losers.map(n => el("li", { text: n })))
       ]);
-      wrap.appendChild(el("div", { class: "golf-year" }, [
-        el("div", { class: "golf-year-head", text: `${y.year} Outing` }),
-        el("div", { class: "golf-cols" }, [winCol, loseCol]),
-        y.loserNote ? el("div", { class: "golf-note", text: y.loserNote }) : null
-      ]));
+      const yearBlock = [
+        el("div", { class: "golf-year-head", text: `${y.year} Outing` })
+      ];
+      if (y.photo) {
+        yearBlock.push(el("div", { class: "golf-photo-wrap" }, [
+          el("img", { attrs: { src: y.photo, alt: `${y.year} golf outing group photo` }, class: "golf-photo" })
+        ]));
+      }
+      yearBlock.push(el("div", { class: "golf-cols" }, [winCol, loseCol]));
+      if (y.loserNote) yearBlock.push(el("div", { class: "golf-note", text: y.loserNote }));
+      wrap.appendChild(el("div", { class: "golf-year" }, yearBlock));
     });
   }).catch(err => console.error(err));
 }
@@ -279,6 +284,135 @@ if (page === "ices") {
 
   document.getElementById("ices-refresh").addEventListener("click", refreshIces);
   refreshIces();
+
+  // ---- ICE SUBMISSION LOG (video evidence) ---------------------------------------------------
+  async function fetchIceLog() {
+    const url = `${SHEET_GVIZ_URL}&sheet=${encodeURIComponent("Ice Submissions")}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("Ice Submissions sheet request failed");
+    const text = await res.text();
+    const match = text.match(/setResponse\(([\s\S]*)\);?\s*$/);
+    if (!match) throw new Error("Unexpected sheet response format");
+    const json = JSON.parse(match[1]);
+    const cols = json.table.cols.map(c => (c.label || "").trim().toLowerCase());
+    const rows = json.table.rows || [];
+
+    const idx = {
+      timestamp: cols.findIndex(c => c.includes("timestamp")),
+      manager: cols.findIndex(c => c.includes("manager")),
+      player: cols.findIndex(c => c.includes("player")),
+      video: cols.findIndex(c => c.includes("video")),
+    };
+
+    return rows
+      .map(r => {
+        const cell = (i) => (i >= 0 && r.c[i] ? r.c[i].v : null);
+        const manager = cell(idx.manager);
+        if (!manager) return null;
+        return {
+          timestamp: cell(idx.timestamp),
+          manager: String(manager),
+          player: cell(idx.player) ? String(cell(idx.player)) : "",
+          videoRaw: cell(idx.video),
+        };
+      })
+      .filter(Boolean);
+  }
+
+  function extractDriveId(url) {
+    if (!url) return null;
+    const m = String(url).match(/[-\w]{20,}/);
+    return m ? m[0] : null;
+  }
+
+  function driveEmbedUrl(rawLink) {
+    const id = extractDriveId(rawLink);
+    return id ? `https://drive.google.com/file/d/${id}/preview` : null;
+  }
+
+  function openVideoModal(title, embedUrl) {
+    const overlay = document.getElementById("video-modal-overlay");
+    const iframe = document.getElementById("video-modal-iframe");
+    const titleEl = document.getElementById("video-modal-title");
+    if (!overlay || !iframe) return;
+    titleEl.textContent = title;
+    iframe.src = embedUrl;
+    overlay.classList.add("open");
+  }
+
+  function closeVideoModal() {
+    const overlay = document.getElementById("video-modal-overlay");
+    const iframe = document.getElementById("video-modal-iframe");
+    if (!overlay || !iframe) return;
+    overlay.classList.remove("open");
+    iframe.src = "";
+  }
+
+  document.getElementById("video-modal-close")?.addEventListener("click", closeVideoModal);
+  document.getElementById("video-modal-overlay")?.addEventListener("click", (e) => {
+    if (e.target.id === "video-modal-overlay") closeVideoModal();
+  });
+
+  function renderIceLog(entries, managers) {
+    const container = document.getElementById("ice-log");
+    if (!container) return;
+    if (!entries.length) {
+      container.innerHTML = `<div class="ices-empty">No submissions yet — be the first to hand over the evidence.</div>`;
+      return;
+    }
+    const byName = Object.fromEntries(managers.map(m => [m.name.toLowerCase(), m]));
+    const groups = new Map();
+    entries.forEach(e => {
+      const key = e.manager || "Unknown";
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(e);
+    });
+
+    container.innerHTML = "";
+    [...groups.entries()]
+      .sort((a, b) => b[1].length - a[1].length)
+      .forEach(([managerName, list]) => {
+        const mgr = byName[managerName.toLowerCase()];
+        const header = el("div", { class: "log-manager-header" }, [
+          avatarNode(managerName, mgr?.photo, 36),
+          el("div", { class: "log-manager-name" }, [
+            el("span", { text: managerName }),
+            el("span", { class: "log-count", text: `${list.length} ice${list.length === 1 ? "" : "s"}` })
+          ])
+        ]);
+        const body = el("div", { class: "log-player-list" });
+        list.forEach(e => {
+          const embedUrl = driveEmbedUrl(e.videoRaw);
+          const watchBtn = embedUrl
+            ? el("button", { class: "btn secondary watch-btn", text: "Watch" })
+            : el("span", { class: "log-no-video", text: "No video" });
+          const row = el("div", { class: "log-player-row" }, [
+            el("span", { class: "log-player-name", text: e.player || "Unknown player" }),
+            el("span", { class: "log-date", text: e.timestamp ? new Date(e.timestamp).toLocaleDateString() : "" }),
+            watchBtn
+          ]);
+          if (embedUrl) {
+            watchBtn.addEventListener("click", () => {
+              openVideoModal(`${managerName} — iced by ${e.player || "?"}`, embedUrl);
+            });
+          }
+          body.appendChild(row);
+        });
+        const card = el("div", { class: "log-manager-card" }, [header, body]);
+        header.addEventListener("click", () => card.classList.toggle("open"));
+        container.appendChild(card);
+      });
+  }
+
+  fetchIceLog()
+    .then(entries => getManagers().then(managers => renderIceLog(entries, managers)))
+    .catch(err => {
+      console.error(err);
+      const container = document.getElementById("ice-log");
+      if (container) {
+        container.innerHTML = `<div class="ices-error">Couldn't load the submission log yet. Double check the sheet tab is named exactly "Ice Submissions".</div>`;
+      }
+    });
 }
 
 // ============================================================
@@ -300,7 +434,7 @@ if (page === "home") {
     });
   }).catch(err => console.error(err));
 
-  // Reigning champion + glance grid (needs championships + managers + records)
+  // Reigning champion + glance grid
   Promise.all([championshipsPromise, getManagers(), loadJSON("data/records.json").catch(() => [])])
     .then(([champs, managers, records]) => {
       const latest = champs[0];
@@ -323,12 +457,12 @@ if (page === "home") {
       if (glance) {
         const seasons = Math.max(...records.map(r => r.seasons), champs.length);
         const stats = [
-  { num: managers.length || 12, label: "Teams" },
-  { num: seasons, label: "Seasons Tracked" },
-  { num: champs.length, label: "Champions Crowned" },
-  { num: 2012, label: "League Founded" },
-  { num: 47, label: "2025 Total Ices" }
-];
+          { num: managers.length || 12, label: "Teams" },
+          { num: seasons, label: "Seasons Tracked" },
+          { num: champs.length, label: "Champions Crowned" },
+          { num: 2012, label: "League Founded" },
+          { num: 47, label: "2025 Total Ices" }
+        ];
         stats.forEach(s => {
           glance.appendChild(el("div", { class: "glance-item" }, [
             el("div", { class: "g-num", text: s.num }),
@@ -339,8 +473,6 @@ if (page === "home") {
     });
 
   // Current season standings — manually maintained in data/standings.json.
-  // (Live pulling from ESPN's API isn't reliable enough to depend on — it
-  // redirects/blocks browser and script requests inconsistently.)
   function renderStandings(data) {
     const wrap = document.getElementById("home-standings");
     if (!wrap || !data || !data.teams || !data.teams.length) return;
