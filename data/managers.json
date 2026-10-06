@@ -1,8 +1,8 @@
 [
-  { "name": "Luke", "team": "The One True Sun God", "tenure": "2025–Present", "note": "Commissioner's Office", "tags": ["Technical Officer", "You"], "photo": "" },
-  { "name": "Austen", "team": "HEINZ Tow-Maters", "tenure": "2023–Present", "note": "Chief Union Steward" , "tags": [], "photo": "" },
+  { "name": "Luke", "team": "The One True Sun God", "tenure": "2025–Present", "note": "", "tags": ["Technical Officer", "ICE Enforcer"], "photo": "" },
+  { "name": "Austen", "team": "HEINZ Tow-Maters", "tenure": "2023–Present", "note": "" , "tags": ["Chief Union Steward"], "photo": "" },
   { "name": "Jett", "team": "Jadolf Hurtler", "tenure": "2017–2024, 2026–Present", "note": "Returning member", "tags": [], "photo": "" },
-  { "name": "Scott", "team": "Galley Boys", "tenure": "2020–Present", "note": "", "tags": [], "photo": "" },
+  { "name": "Scott", "team": "Galley Boys", "tenure": "2020–Present", "note": "2023 Champion", "tags": [], "photo": "" },
   { "name": "Jeff", "team": "Brain Blast", "tenure": "2018–Present", "note": "", "tags": [], "photo": "" },
   { "name": "Tyler", "team": "Sauce Boss", "tenure": "2017–Present", "note": "2020 Champion", "tags": ["Founder"], "photo": "" },
   { "name": "Mike", "team": "Forbidden Weens", "tenure": "2017–Present", "note": "2× Champion (2017, 2022)", "tags": ["Founder"], "photo": "" },
