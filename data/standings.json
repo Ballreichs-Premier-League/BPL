@@ -1,17 +1,17 @@
 {
   "teams": [
-    { "name": "The One True Sun God",        "wins": 4, "losses": 1, "ties": 0, "standing": 4 },
-    { "name": "HEINZ Tow-Maters",    "wins": 5, "losses": 0, "ties": 0, "standing": 2 },
-    { "name": "Jadolf Hurtler",      "wins": 1, "losses": 4, "ties": 0, "standing": 11 },
-    { "name": "Galley Boys",         "wins": 1, "losses": 4, "ties": 0, "standing": 10 },
-    { "name": "Brain Blast",         "wins": 5, "losses": 0, "ties": 0, "standing": 1 },
-    { "name": "Sauce Boss",          "wins": 2, "losses": 3, "ties": 0, "standing": 6 },
-    { "name": "Forbidden Weens",     "wins": 1, "losses": 4, "ties": 0, "standing": 9 },
-    { "name": "Monty's Python",         "wins": 2, "losses": 2, "ties": 0, "standing": 6 },
-    { "name": "Stroud Boys",         "wins": 4, "losses": 1, "ties": 0, "standing": 3 },
-    { "name": "Go Team!",        "wins": 2, "losses": 3, "ties": 0, "standing": 8 },
-    { "name": "Spice Lords",         "wins": 2, "losses": 3, "ties": 0, "standing": 7 },
-    { "name": "Piesman Fan Club",    "wins": 0, "losses": 5, "ties": 0, "standing": 12 }
+    { "name": "The One True Sun God",        "wins": 5, "losses": 1, "ties": 0, "standing": 3 },
+    { "name": "HEINZ Tow-Maters",    "wins": 6, "losses": 0, "ties": 0, "standing": 1 },
+    { "name": "Jadolf Hurtler",      "wins": 1, "losses": 5, "ties": 0, "standing": 10 },
+    { "name": "Galley Boys",         "wins": 1, "losses": 5, "ties": 0, "standing": 11 },
+    { "name": "Brain Blast",         "wins": 5, "losses": 1, "ties": 0, "standing": 2 },
+    { "name": "Sauce Boss",          "wins": 3, "losses": 3, "ties": 0, "standing": 5 },
+    { "name": "Forbidden Weens",     "wins": 2, "losses": 4, "ties": 0, "standing": 9 },
+    { "name": "Monty's Python",         "wins": 3, "losses": 3, "ties": 0, "standing": 6 },
+    { "name": "Stroud Boys",         "wins": 4, "losses": 2, "ties": 0, "standing": 4 },
+    { "name": "Go Team!",        "wins": 3, "losses": 3, "ties": 0, "standing": 8 },
+    { "name": "Spice Lords",         "wins": 3, "losses": 3, "ties": 0, "standing": 7 },
+    { "name": "Piesman Fan Club",    "wins": 0, "losses": 6, "ties": 0, "standing": 12 }
   ]
 }
 
